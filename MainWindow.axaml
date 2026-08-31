@@ -1,0 +1,177 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mi="clr-namespace:Material.Icons.Avalonia;assembly=Material.Icons.Avalonia"
+        x:Class="SkkmNugetSample.MainWindow"
+        Width="1200" Height="740"
+        MinWidth="880" MinHeight="520"
+        Background="#17171A"
+        Title="Демо SkkmConnector"
+        Icon="/Assets/skkm4-logo.png">
+
+  <Window.Styles>
+    <!-- Заголовки секций -->
+    <Style Selector="TextBlock.section">
+      <Setter Property="Foreground" Value="#7E7E86"/>
+      <Setter Property="FontSize" Value="11"/>
+      <Setter Property="FontWeight" Value="SemiBold"/>
+    </Style>
+
+    <!-- Поля ввода / редакторы -->
+    <Style Selector="TextBox">
+      <Setter Property="Background" Value="#1B1B1F"/>
+      <Setter Property="BorderBrush" Value="#2C2C32"/>
+      <Setter Property="CornerRadius" Value="4"/>
+    </Style>
+    <!-- Фон поля не меняется при наведении / фокусе -->
+    <Style Selector="TextBox:pointerover /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#1B1B1F"/>
+    </Style>
+    <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+      <Setter Property="Background" Value="#1B1B1F"/>
+    </Style>
+
+    <!-- Дерево коллекции -->
+    <Style Selector="TreeView">
+      <Setter Property="Padding" Value="0"/>
+      <Setter Property="Background" Value="Transparent"/>
+    </Style>
+    <Style Selector="TreeViewItem">
+      <Setter Property="Padding" Value="4,3"/>
+      <Setter Property="Margin" Value="0"/>
+      <Setter Property="MinHeight" Value="28"/>
+      <Setter Property="HorizontalAlignment" Value="Stretch"/>
+    </Style>
+    <Style Selector="TreeViewItem:selected">
+      <Setter Property="Padding" Value="4,3"/>
+      <Setter Property="Margin" Value="0"/>
+    </Style>
+    <Style Selector="TreeViewItem /template/ ToggleButton#PART_ExpandCollapseChevron">
+      <Setter Property="Width" Value="18"/>
+      <Setter Property="MinWidth" Value="18"/>
+      <Setter Property="MaxWidth" Value="18"/>
+      <Setter Property="Margin" Value="0"/>
+    </Style>
+    <Style Selector="TreeViewItem.folder">
+      <Setter Property="Focusable" Value="False"/>
+    </Style>
+  </Window.Styles>
+
+  <Grid Margin="10">
+    <Grid.ColumnDefinitions>
+      <ColumnDefinition Width="290" MinWidth="230" MaxWidth="440"/>
+      <ColumnDefinition Width="6"/>
+      <ColumnDefinition Width="*" MinWidth="480"/>
+    </Grid.ColumnDefinitions>
+
+    <!-- Левая панель: подключение + коллекция -->
+    <Border Grid.Column="0" Background="#1E1E22" BorderBrush="#2C2C32" BorderThickness="1" CornerRadius="6" Padding="12">
+      <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Spacing="6" Margin="0,0,0,10">
+          <TextBlock Text="ПОДКЛЮЧЕНИЕ" Classes="section" />
+          <DockPanel>
+            <TextBox DockPanel.Dock="Right" x:Name="PortBox" Watermark="Порт" Width="88" Margin="6,0,0,0" />
+            <TextBox x:Name="HostBox" Watermark="Хост, напр. localhost" />
+          </DockPanel>
+          <TextBox x:Name="TokenBox" Watermark="Токен (api_key)" />
+          <TextBox x:Name="DeviceBox" Watermark="Имя ККМ, напр. Emu" />
+          <DockPanel>
+            <TextBox DockPanel.Dock="Right" x:Name="CashierVatinBox" Watermark="ИНН кассира" Width="140" Margin="6,0,0,0" />
+            <TextBox x:Name="CashierBox" Watermark="Кассир, напр. Иванов А.И." />
+          </DockPanel>
+          <TextBox x:Name="DocumentIdBox" Watermark="Id документа (DocId / taskId)" />
+          <DockPanel>
+            <TextBox DockPanel.Dock="Right" x:Name="ToBox" Watermark="По (yyyy-MM-dd)" Width="140" Margin="6,0,0,0" />
+            <TextBox x:Name="FromBox" Watermark="С (yyyy-MM-dd)" />
+          </DockPanel>
+          <TextBlock Text="КОЛЛЕКЦИЯ" Classes="section" Margin="0,8,0,0" />
+        </StackPanel>
+        <Border BorderBrush="#2C2C32" BorderThickness="1" CornerRadius="4" Background="#1B1B1F" ClipToBounds="True">
+          <TreeView x:Name="ExamplesTree"
+                    HorizontalAlignment="Stretch"
+                    ScrollViewer.AllowAutoHide="False"
+                    ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    ScrollViewer.VerticalScrollBarVisibility="Visible" />
+        </Border>
+      </DockPanel>
+    </Border>
+
+    <GridSplitter Grid.Column="1"
+                  Width="6"
+                  HorizontalAlignment="Stretch"
+                  VerticalAlignment="Stretch"
+                  Background="Transparent" />
+
+    <Grid Grid.Column="2" RowDefinitions="Auto,*">
+      <!-- Верхняя панель запроса -->
+      <Border Grid.Row="0" Background="#1E1E22" BorderBrush="#2C2C32" BorderThickness="1"
+              CornerRadius="6" Padding="12,8" Margin="0,0,0,10">
+        <DockPanel LastChildFill="True">
+          <Button DockPanel.Dock="Right" x:Name="CancelButton" Content="Отменить"
+                  Padding="18,7" Margin="8,0,0,0" VerticalAlignment="Center"
+                  IsEnabled="False" Click="OnCancelClick" />
+          <Button DockPanel.Dock="Right" x:Name="RunButton" Classes="accent" Content="Выполнить"
+                  Padding="18,7" VerticalAlignment="Center" Click="OnRunClick" />
+          <TextBlock DockPanel.Dock="Right" x:Name="StatusText" VerticalAlignment="Center"
+                     FontWeight="Bold" MinWidth="48" Margin="0,0,14,0" />
+          <Border DockPanel.Dock="Left" x:Name="MethodPill" Background="#3F8F53" CornerRadius="4"
+                  Padding="8,3" Margin="0,0,12,0" VerticalAlignment="Center">
+            <TextBlock x:Name="MethodBadge" Foreground="#FFFFFF" FontWeight="Bold" FontSize="12" />
+          </Border>
+          <TextBlock x:Name="RequestTitle" Text="Выберите запрос" FontWeight="SemiBold" Foreground="#E6E6EA"
+                     TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+        </DockPanel>
+      </Border>
+
+      <!-- Блоки запрос / ответ -->
+      <Grid Grid.Row="1" ColumnDefinitions="*,6,*">
+        <!-- ЗАПРОС -->
+        <Border Grid.Column="0" Background="#1B1B1F" BorderBrush="#2C2C32" BorderThickness="1"
+                CornerRadius="6" ClipToBounds="True">
+          <DockPanel>
+            <Border DockPanel.Dock="Top" Background="#232327" BorderBrush="#2C2C32" BorderThickness="0,0,0,1" Height="38" Padding="12,0">
+              <DockPanel VerticalAlignment="Center">
+                <Button DockPanel.Dock="Right" x:Name="CopyButton" Padding="6" MinWidth="0"
+                        VerticalAlignment="Center" ToolTip.Tip="Копировать" Click="OnCopyClick">
+                  <mi:MaterialIcon Kind="ContentCopy" Width="16" Height="16" />
+                </Button>
+                <TextBlock Text="ЗАПРОС" Classes="section" VerticalAlignment="Center" />
+              </DockPanel>
+            </Border>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible">
+              <SelectableTextBlock x:Name="SourceText"
+                                   Padding="16,12"
+                                   LineHeight="20"
+                                   Foreground="#DCDCDC"
+                                   FontFamily="Cascadia Code, Consolas, Courier New, monospace"
+                                   FontSize="13" />
+            </ScrollViewer>
+          </DockPanel>
+        </Border>
+
+        <GridSplitter Grid.Column="1"
+                      Width="6"
+                      HorizontalAlignment="Stretch"
+                      VerticalAlignment="Stretch"
+                      Background="Transparent" />
+
+        <!-- ОТВЕТ -->
+        <Border Grid.Column="2" Background="#1B1B1F" BorderBrush="#2C2C32" BorderThickness="1"
+                CornerRadius="6" ClipToBounds="True">
+          <DockPanel>
+            <Border DockPanel.Dock="Top" Background="#232327" BorderBrush="#2C2C32" BorderThickness="0,0,0,1" Height="38" Padding="12,0">
+              <TextBlock Text="ОТВЕТ" Classes="section" VerticalAlignment="Center" />
+            </Border>
+            <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Visible">
+              <SelectableTextBlock x:Name="ResponseBox"
+                                   Padding="16,12"
+                                   LineHeight="20"
+                                   Foreground="#DCDCDC"
+                                   FontFamily="Cascadia Code, Consolas, Courier New, monospace"
+                                   FontSize="13" />
+            </ScrollViewer>
+          </DockPanel>
+        </Border>
+      </Grid>
+    </Grid>
+  </Grid>
+</Window>

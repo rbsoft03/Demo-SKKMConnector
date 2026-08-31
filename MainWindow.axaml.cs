@@ -1,0 +1,306 @@
+using System;
+using System.Threading.Tasks;
+using Avalonia.Controls;
+using Avalonia.Interactivity;
+using Avalonia.Layout;
+using Avalonia.Markup.Xaml;
+using Avalonia.Media;
+using Avalonia.Media.Immutable;
+using SkkmConnector;
+using SkkmNugetSample.Ui;
+
+namespace SkkmNugetSample;
+
+public partial class MainWindow : Window
+{
+    private readonly ConnectionSettings _connection = new();
+
+    private TextBox _host = null!;
+    private TextBox _port = null!;
+    private TextBox _token = null!;
+    private TextBox _device = null!;
+    private TextBox _cashier = null!;
+    private TextBox _cashierVatin = null!;
+    private TextBox _documentId = null!;
+    private TextBox _from = null!;
+    private TextBox _to = null!;
+    private TreeView _tree = null!;
+    private Button _run = null!;
+    private Button _cancel = null!;
+    private TextBlock _status = null!;
+    private SelectableTextBlock _source = null!;
+    private Button _copy = null!;
+    private SelectableTextBlock _response = null!;
+    private TextBlock _methodBadge = null!;
+    private Border _methodPill = null!;
+    private TextBlock _requestTitle = null!;
+
+    private static readonly IBrush GetMethodBrush = new ImmutableSolidColorBrush(Color.Parse("#6BAF5A"));
+    private static readonly IBrush PostMethodBrush = new ImmutableSolidColorBrush(Color.Parse("#D19A66"));
+    private static readonly IBrush PutMethodBrush = new ImmutableSolidColorBrush(Color.Parse("#61AFEF"));
+    private static readonly IBrush DeleteMethodBrush = new ImmutableSolidColorBrush(Color.Parse("#E06C75"));
+    private static readonly IBrush GetPillBrush = new ImmutableSolidColorBrush(Color.Parse("#3F8F53"));
+    private static readonly IBrush PostPillBrush = new ImmutableSolidColorBrush(Color.Parse("#C4703A"));
+    private static readonly IBrush PutPillBrush = new ImmutableSolidColorBrush(Color.Parse("#3A7AB8"));
+    private static readonly IBrush DeletePillBrush = new ImmutableSolidColorBrush(Color.Parse("#B84A52"));
+    private static readonly IBrush StatusOkBrush = new ImmutableSolidColorBrush(Color.Parse("#62C073"));
+    private static readonly IBrush StatusErrorBrush = new ImmutableSolidColorBrush(Color.Parse("#E06C75"));
+    private static readonly IBrush StatusIdleBrush = new ImmutableSolidColorBrush(Color.Parse("#7E7E86"));
+
+    private ExampleItem? _selected;
+    private TreeViewItem? _selectedLeaf;
+    private bool _syncingSelection;
+    private string _currentSource = "";
+
+    public MainWindow()
+    {
+        AvaloniaXamlLoader.Load(this);
+
+        _host = this.FindControl<TextBox>("HostBox")!;
+        _port = this.FindControl<TextBox>("PortBox")!;
+        _token = this.FindControl<TextBox>("TokenBox")!;
+        _device = this.FindControl<TextBox>("DeviceBox")!;
+        _cashier = this.FindControl<TextBox>("CashierBox")!;
+        _cashierVatin = this.FindControl<TextBox>("CashierVatinBox")!;
+        _documentId = this.FindControl<TextBox>("DocumentIdBox")!;
+        _from = this.FindControl<TextBox>("FromBox")!;
+        _to = this.FindControl<TextBox>("ToBox")!;
+        _tree = this.FindControl<TreeView>("ExamplesTree")!;
+        _run = this.FindControl<Button>("RunButton")!;
+        _cancel = this.FindControl<Button>("CancelButton")!;
+        _status = this.FindControl<TextBlock>("StatusText")!;
+        _source = this.FindControl<SelectableTextBlock>("SourceText")!;
+        _copy = this.FindControl<Button>("CopyButton")!;
+        _response = this.FindControl<SelectableTextBlock>("ResponseBox")!;
+        _methodBadge = this.FindControl<TextBlock>("MethodBadge")!;
+        _methodPill = this.FindControl<Border>("MethodPill")!;
+        _requestTitle = this.FindControl<TextBlock>("RequestTitle")!;
+
+        _from.Text = DateTime.Today.AddDays(-7).ToString(ConnectionSettings.DateFormat);
+        _to.Text = DateTime.Today.ToString(ConnectionSettings.DateFormat);
+
+        LoadExamples();
+        _tree.SelectionChanged += OnExampleSelected;
+        Closed += (_, _) => ExampleRunner.Session.Dispose();
+    }
+
+    // Заполняет дерево: папки и запросы, как в Bruno.
+    private void LoadExamples()
+    {
+        foreach (var root in Ui.Examples.Tree)
+            _tree.Items.Add(BuildNode(root));
+    }
+
+    private TreeViewItem BuildNode(ExampleTreeNode node)
+    {
+        if (node.Item != null)
+        {
+            var leaf = new TreeViewItem
+            {
+                Header = RequestHeader(node.Item),
+                Tag = node.Item
+            };
+            leaf.Classes.Add("request");
+            return leaf;
+        }
+
+        var folder = new TreeViewItem
+        {
+            Header = FolderHeader(node.Title),
+            IsExpanded = true,
+            Focusable = false
+        };
+        folder.Classes.Add("folder");
+        foreach (var child in node.Children)
+            folder.Items.Add(BuildNode(child));
+        return folder;
+    }
+
+    private void OnExampleSelected(object? sender, SelectionChangedEventArgs e)
+    {
+        if (_syncingSelection)
+            return;
+
+        if (_tree.SelectedItem is not TreeViewItem node || node.Tag is not ExampleItem item)
+        {
+            RestoreLeafSelection();
+            return;
+        }
+
+        _selectedLeaf = node;
+        ShowExample(item);
+    }
+
+    private void RestoreLeafSelection()
+    {
+        _syncingSelection = true;
+        try
+        {
+            if (_tree.SelectedItem is TreeViewItem folder)
+                folder.IsSelected = false;
+            if (_selectedLeaf != null)
+                _selectedLeaf.IsSelected = true;
+        }
+        finally
+        {
+            _syncingSelection = false;
+        }
+    }
+
+    private void ShowExample(ExampleItem item)
+    {
+        _selected = item;
+        _currentSource = ExampleSource.Read(item);
+        ToolTip.SetTip(_copy, "Копировать");
+        _requestTitle.Text = item.Title;
+        _methodBadge.Text = item.HttpMethod;
+        _methodPill.Background = MethodPillBrush(item.HttpMethod);
+        SetResponse("");
+        SetStatus("", StatusIdleBrush);
+
+        var inlines = _source.Inlines;
+        if (inlines != null)
+            CSharpHighlighter.Apply(_currentSource, inlines);
+        else
+            _source.Text = _currentSource;
+    }
+
+    private static Control FolderHeader(string title) =>
+        new TextBlock
+        {
+            Text = title,
+            FontWeight = FontWeight.SemiBold,
+            VerticalAlignment = VerticalAlignment.Center
+        };
+
+    private static Control RequestHeader(ExampleItem item) =>
+        new StackPanel
+        {
+            Orientation = Orientation.Horizontal,
+            Spacing = 8,
+            VerticalAlignment = VerticalAlignment.Center,
+            Children =
+            {
+                new TextBlock
+                {
+                    Text = item.HttpMethod,
+                    Width = 36,
+                    MinWidth = 36,
+                    FontSize = 11,
+                    FontWeight = FontWeight.SemiBold,
+                    Foreground = MethodTextBrush(item.HttpMethod),
+                    VerticalAlignment = VerticalAlignment.Center
+                },
+                new TextBlock
+                {
+                    Text = item.Title,
+                    TextTrimming = TextTrimming.CharacterEllipsis,
+                    VerticalAlignment = VerticalAlignment.Center
+                }
+            }
+        };
+
+    private async void OnCopyClick(object? sender, RoutedEventArgs e)
+    {
+        if (string.IsNullOrEmpty(_currentSource))
+            return;
+
+        var clipboard = Clipboard;
+        if (clipboard == null)
+            return;
+
+        await clipboard.SetTextAsync(_currentSource);
+        ToolTip.SetTip(_copy, "Скопировано");
+    }
+
+    private async void OnRunClick(object? sender, RoutedEventArgs e)
+    {
+        if (_selected == null)
+        {
+            SetStatus("Выберите пример", StatusIdleBrush);
+            return;
+        }
+
+        ReadConnection();
+        if (!_connection.TryRead(_selected.NeedDocumentId, out string error))
+        {
+            SetResponse(error);
+            SetStatus("Проверьте подключение", StatusIdleBrush);
+            return;
+        }
+
+        _run.IsEnabled = false;
+        _cancel.IsEnabled = true;
+        SetStatus("Выполняется…", StatusIdleBrush);
+
+        try
+        {
+            ExampleRunner.ApplyConnection(_selected.Instance, _connection);
+            var kkm = await ExampleRunner.Invoke(_selected);
+            SetResponse(ResponseText.Format(kkm));
+            if (kkm.ErrorCode == -3)
+                SetStatus("Отменено", StatusIdleBrush);
+            else
+                SetStatus(kkm.Ok ? "OK" : "Error", kkm.Ok ? StatusOkBrush : StatusErrorBrush);
+        }
+        catch (Exception ex)
+        {
+            SetResponse(ex.ToString());
+            SetStatus("Error", StatusErrorBrush);
+        }
+        finally
+        {
+            _run.IsEnabled = true;
+            _cancel.IsEnabled = false;
+        }
+    }
+
+    private void OnCancelClick(object? sender, RoutedEventArgs e)
+    {
+        ExampleRunner.Session.Cancel();
+    }
+
+    private void ReadConnection()
+    {
+        _connection.Host = _host.Text ?? "";
+        _connection.Port = int.TryParse(_port.Text, out var port) ? port : 0;
+        _connection.Token = _token.Text ?? "";
+        _connection.Device = _device.Text ?? "";
+        _connection.Cashier = _cashier.Text ?? "";
+        _connection.CashierVatin = _cashierVatin.Text ?? "";
+        _connection.DocumentId = _documentId.Text ?? "";
+        _connection.FromText = _from.Text ?? "";
+        _connection.ToText = _to.Text ?? "";
+    }
+
+    private static IBrush MethodTextBrush(string method) => method switch
+    {
+        "GET" => GetMethodBrush,
+        "PUT" => PutMethodBrush,
+        "DELETE" => DeleteMethodBrush,
+        _ => PostMethodBrush
+    };
+
+    private static IBrush MethodPillBrush(string method) => method switch
+    {
+        "GET" => GetPillBrush,
+        "PUT" => PutPillBrush,
+        "DELETE" => DeletePillBrush,
+        _ => PostPillBrush
+    };
+
+    private void SetResponse(string text)
+    {
+        var inlines = _response.Inlines;
+        if (inlines != null)
+            CSharpHighlighter.ApplyJson(text, inlines);
+        else
+            _response.Text = text;
+    }
+
+    private void SetStatus(string text, IBrush brush)
+    {
+        _status.Text = text;
+        _status.Foreground = brush;
+    }
+}
