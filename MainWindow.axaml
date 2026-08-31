@@ -6,7 +6,7 @@
         MinWidth="880" MinHeight="520"
         Background="#17171A"
         Title="Демо SkkmConnector"
-        Icon="/Assets/skkm4-logo.png">
+        Icon="/Assets/skkmconnector-cs-icon.ico">
 
   <Window.Styles>
     <!-- Заголовки секций -->

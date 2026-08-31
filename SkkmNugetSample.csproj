@@ -9,7 +9,7 @@
     <RootNamespace>SkkmNugetSample</RootNamespace>
     <AssemblyTitle>Демо SkkmConnector</AssemblyTitle>
     <CheckEolTargetFramework>false</CheckEolTargetFramework>
-    <ApplicationIcon>Assets\skkm4-logo.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\skkmconnector-cs-icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
