@@ -1,7 +1,7 @@
 # SkkmNugetSample — демо коннектора SkkmConnector
 
 Настольное приложение (Avalonia), которое показывает возможности библиотеки
-[`SkkmConnector`](../docs/Сервер%20ККМ/Коннектор%20Сервер%20ККМ/README.md) вживую:
+[`SkkmConnector`](https://github.com/sodiUmU/SKKMConnector) вживую:
 для каждого метода коннектора есть готовый пример — его **исходный код** видно на
 экране, а **ответ сервера** приходит после нажатия «Запустить».
 
@@ -58,7 +58,7 @@
 
 1. Положите файл `SkkmConnector.1.25.5.nupkg` в папку `SkkmNugetSample/packages`
    (если его там ещё нет - соберите пакет коннектора: `dotnet pack` в проекте
-   `SkkmConnector`, см. README коннектора).
+   `SkkmConnector`, см. [README коннектора](https://github.com/sodiUmU/SKKMConnector/blob/main/README.md)).
 2. Восстановите зависимости и запустите:
 
 ```powershell
@@ -140,7 +140,7 @@ public class CheckSample01 : Sample
 4. Пересоберите — пример появится в дереве.
 
 Полное описание всех методов, полей и типов - в
-[документации API коннектора](../docs/Сервер%20ККМ/Коннектор%20Сервер%20ККМ/API.md).
+[документации API коннектора](https://github.com/sodiUmU/SKKMConnector/blob/main/API.md).
 
 ---
 
@@ -155,7 +155,7 @@ public class CheckSample01 : Sample
 
 ## Лицензия
 
-Распространяется свободно по лицензии **MIT** — см. README коннектора.
+Распространяется свободно по лицензии **MIT** — см. [README коннектора](https://github.com/sodiUmU/SKKMConnector/blob/main/README.md).
 
 **Разработчик:** Челпанов Артём / RBSoft · [rbsoft.ru](https://rbsoft.ru) ·
 [online@rbsoft.ru](mailto:online@rbsoft.ru)
