@@ -1,4 +1,4 @@
-# SkkmNugetSample — демо коннектора SkkmConnector
+# Демо приложение коннектора для Сервера ККМ
 
 Настольное приложение (Avalonia), которое показывает возможности библиотеки
 [`SkkmConnector`](https://github.com/sodiUmU/SKKMConnector) вживую:
