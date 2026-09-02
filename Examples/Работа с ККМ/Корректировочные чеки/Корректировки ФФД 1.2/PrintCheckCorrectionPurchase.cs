@@ -12,8 +12,8 @@ public class PrintCheckCorrectionPurchase : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
-        kkm.PaymentType = (int)CheckType.CorrectionPurchase;
-        kkm.TaxVariant = (int)TaxSystem.ОСН;
+        kkm.PaymentType = CheckType.CorrectionPurchase;
+        kkm.TaxVariant = TaxSystem.ОСН;
         kkm.CorrectionData = new CorrectionData
         {
             Type = CorrectionTypes.Самостоятельно,

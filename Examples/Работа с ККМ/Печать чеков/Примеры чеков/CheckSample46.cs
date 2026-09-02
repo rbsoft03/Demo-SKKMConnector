@@ -12,8 +12,8 @@ public class CheckSample46 : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
-        kkm.PaymentType = 1;
-        kkm.TaxVariant = 0;
+        kkm.PaymentType = CheckType.Sale;
+        kkm.TaxVariant = TaxSystem.ОСН;
         kkm.Positions.Add(new FiscalLine
         {
             Name = "Вода 1л.",
@@ -22,9 +22,9 @@ public class CheckSample46 : Sample
             Sum = 0.04m,
             Tax = "none",
             TaxSum = 0m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 1,
-            MeasureOfQuantity = 0,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.Goods,
+            MeasureOfQuantity = MeasureOfQuantity.Piece,
         });
         kkm.Positions.Add(new FiscalLine
         {
@@ -34,9 +34,9 @@ public class CheckSample46 : Sample
             Sum = 0.05m,
             Tax = "none",
             TaxSum = 0m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 1,
-            MeasureOfQuantity = 0,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.Goods,
+            MeasureOfQuantity = MeasureOfQuantity.Piece,
         });
         kkm.Positions.Add(new FiscalLine
         {
@@ -46,9 +46,9 @@ public class CheckSample46 : Sample
             Sum = 0.1m,
             Tax = "none",
             TaxSum = 0m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 1,
-            MeasureOfQuantity = 0,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.Goods,
+            MeasureOfQuantity = MeasureOfQuantity.Piece,
         });
         kkm.Positions.Add(new FiscalLine
         {
@@ -58,9 +58,9 @@ public class CheckSample46 : Sample
             Sum = 1.0m,
             Tax = "none",
             TaxSum = 0m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 1,
-            MeasureOfQuantity = 0,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.Goods,
+            MeasureOfQuantity = MeasureOfQuantity.Piece,
         });
         kkm.Payments = new Payments
         {

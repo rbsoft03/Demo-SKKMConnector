@@ -11,7 +11,7 @@ public class ConfirmKM : Sample
     {
         kkm.DeviceName = deviceName;
         kkm.RequestKmGuid = "guid-из-проверки-КМ";
-        kkm.ConfirmationType = 0;
+        kkm.ConfirmationType = KmConfirmationType.Included;
         await kkm.ConfirmKM();
 
         return kkm;

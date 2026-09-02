@@ -13,8 +13,8 @@ public class PrintCheckReturnAdvance : Sample
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
         kkm.Electronically = false;
-        kkm.PaymentType = 2;
-        kkm.TaxVariant = 2;
+        kkm.PaymentType = CheckType.SaleReturn;
+        kkm.TaxVariant = TaxSystem.УСНД_Р;
         kkm.Customer = new Customer
         {
             Info = "ООО 'Рога и Копыта'",
@@ -39,8 +39,8 @@ public class PrintCheckReturnAdvance : Sample
             Department = 2,
             Tax = "120",
             TaxSum = 0,
-            SignMethodCalculation = 3,
-            SignCalculationObject = 10
+            SignMethodCalculation = SignMethodCalculation.Advance,
+            SignCalculationObject = SignCalculationObject.Advance
         });
         await kkm.PrintCheck();
         return kkm;

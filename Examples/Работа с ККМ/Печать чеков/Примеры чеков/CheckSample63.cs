@@ -12,8 +12,8 @@ public class CheckSample63 : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
-        kkm.PaymentType = 1;
-        kkm.TaxVariant = 0;
+        kkm.PaymentType = CheckType.Sale;
+        kkm.TaxVariant = TaxSystem.ОСН;
         kkm.Positions.Add(new FiscalLine
         {
             Name = "Молоко 1л.",
@@ -22,9 +22,9 @@ public class CheckSample63 : Sample
             Sum = 40.0m,
             Tax = "none",
             TaxSum = 0m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 33,
-            MeasureOfQuantity = 0,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.ТМ,
+            MeasureOfQuantity = MeasureOfQuantity.Piece,
             Marking = new Marking
             {
                 Gtin = "04670540176099",

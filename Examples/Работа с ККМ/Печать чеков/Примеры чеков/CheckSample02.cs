@@ -12,8 +12,8 @@ public class CheckSample02 : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
-        kkm.PaymentType = 1;
-        kkm.TaxVariant = 1;
+        kkm.PaymentType = CheckType.Sale;
+        kkm.TaxVariant = TaxSystem.УСН;
         kkm.Electronically = true;
         kkm.Customer = new Customer
         {
@@ -30,8 +30,8 @@ public class CheckSample02 : Sample
             Department = 0,
             Tax = "20",
             TaxSum = 0m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 2,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.ExcisableGoods,
             ExciseAmount = 1m,
         });
         kkm.Positions.Add(new FiscalLine
@@ -43,8 +43,8 @@ public class CheckSample02 : Sample
             Department = 1,
             Tax = "20",
             TaxSum = 0m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 2,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.ExcisableGoods,
         });
         kkm.Payments = new Payments
         {

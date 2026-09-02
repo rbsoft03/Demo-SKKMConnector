@@ -1,6 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
+using System.Text.RegularExpressions;
+using System.Xml.Linq;
+using Avalonia.Controls;
 using Avalonia.Controls.Documents;
 using Avalonia.Media;
 
@@ -39,6 +43,123 @@ public static class CSharpHighlighter
     private static readonly IBrush Comment = new SolidColorBrush(Color.Parse("#6A9955"));
     private static readonly IBrush Number = new SolidColorBrush(Color.Parse("#B5CEA8"));
     private static readonly IBrush Key = new SolidColorBrush(Color.Parse("#9CDCFE"));
+
+    // <summary> типов и полей из XML-документации коннектора
+    private static Dictionary<string, string>? _summaries;
+    private static readonly HashSet<string> TypeNames = new(StringComparer.Ordinal);
+    private static Dictionary<string, string> Summaries => _summaries ??= LoadSummaries();
+
+    private static Dictionary<string, string> LoadSummaries()
+    {
+        var types = new Dictionary<string, string>(StringComparer.Ordinal);
+        var members = new Dictionary<string, string?>(StringComparer.Ordinal); // null — неоднозначное имя
+        try
+        {
+            var path = Path.Combine(AppContext.BaseDirectory, "SkkmConnector.xml");
+            if (File.Exists(path))
+            {
+                foreach (var member in XDocument.Load(path).Descendants("member"))
+                {
+                    var name = (string?)member.Attribute("name");
+                    var summary = member.Element("summary");
+                    if (name is null || summary is null || name.Length < 2)
+                        continue;
+
+                    char kind = name[0];
+                    if (kind != 'T' && kind != 'P' && kind != 'F')   // типы, свойства, поля
+                        continue;
+
+                    var doc = BuildDoc(summary);
+                    if (doc.Length == 0)
+                        continue;
+
+                    var shortName = ShortName(name);
+                    if (kind == 'T')
+                    {
+                        types[shortName] = doc;
+                        TypeNames.Add(shortName);
+                    }
+                    else if (members.TryGetValue(shortName, out var existing))
+                    {
+                        if (existing != null && existing != doc)
+                            members[shortName] = null; // разные описания под одним именем — пропускаем
+                    }
+                    else
+                    {
+                        members[shortName] = doc;
+                    }
+                }
+            }
+        }
+        catch
+        {
+            // нет файла или битый XML — просто без подсказок
+        }
+
+        // типы приоритетнее; неоднозначные поля не добавляем
+        foreach (var kv in members)
+            if (kv.Value != null && !types.ContainsKey(kv.Key))
+                types[kv.Key] = kv.Value;
+
+        return types;
+    }
+
+    private static string ShortName(string docName)
+    {
+        var s = docName.Length > 1 && docName[1] == ':' ? docName[2..] : docName;
+        int paren = s.IndexOf('(');
+        if (paren >= 0) s = s[..paren];
+        int dot = s.LastIndexOf('.');
+        return dot >= 0 ? s[(dot + 1)..] : s;
+    }
+
+    private static string BuildDoc(XElement el)
+    {
+        var sb = new StringBuilder();
+        foreach (var node in el.Nodes())
+            RenderDoc(node, sb);
+
+        var lines = new List<string>();
+        foreach (var raw in sb.ToString().Split('\n'))
+        {
+            var line = Regex.Replace(raw, @"[ \t]+", " ").Trim();
+            if (line.Length > 0)
+                lines.Add(line);
+        }
+        return string.Join("\n", lines);
+    }
+
+    private static void RenderDoc(XNode node, StringBuilder sb)
+    {
+        switch (node)
+        {
+            case XText t:
+                sb.Append(t.Value);
+                break;
+            case XElement e:
+                switch (e.Name.LocalName)
+                {
+                    case "para":
+                        sb.Append('\n');
+                        foreach (var c in e.Nodes()) RenderDoc(c, sb);
+                        sb.Append('\n');
+                        break;
+                    case "br":
+                        sb.Append('\n');
+                        break;
+                    case "see":
+                    case "seealso":
+                        var cref = (string?)e.Attribute("cref");
+                        if (!string.IsNullOrEmpty(cref)) sb.Append(ShortName(cref));
+                        else foreach (var c in e.Nodes()) RenderDoc(c, sb);
+                        break;
+                    default:
+                        foreach (var c in e.Nodes()) RenderDoc(c, sb);
+                        break;
+                }
+                break;
+        }
+    }
 
     public static void Apply(string code, InlineCollection target)
     {
@@ -86,10 +207,24 @@ public static class CSharpHighlighter
             {
                 while (i < n && (char.IsLetterOrDigit(code[i]) || code[i] == '_')) i++;
                 string word = code.Substring(start, i - start);
+                bool hasDoc = Summaries.TryGetValue(word, out var tip);
+                bool isType = Types.Contains(word) || prev == "new" || TypeNames.Contains(word);
                 var color = Keywords.Contains(word) ? Keyword
-                          : Types.Contains(word) || prev == "new" ? Type
+                          : isType ? Type
                           : Default;
-                Emit(start, i, color); prev = word;
+
+                if (hasDoc && !ReferenceEquals(color, Keyword))
+                {
+                    if (buffer.Length > 0) { target.Add(new Run(buffer.ToString()) { Foreground = brush }); buffer.Clear(); }
+                    var chip = new TextBlock { Text = word, Foreground = color, Background = Brushes.Transparent };
+                    ToolTip.SetTip(chip, new TextBlock { Text = tip, MaxWidth = 380, TextWrapping = TextWrapping.Wrap });
+                    target.Add(new InlineUIContainer(chip));
+                    prev = word;
+                }
+                else
+                {
+                    Emit(start, i, color); prev = word;
+                }
             }
             else if (char.IsDigit(c))                                 // число
             {

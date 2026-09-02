@@ -12,8 +12,8 @@ public class PrintCheckReturn : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
-        kkm.PaymentType = 2;
-        kkm.TaxVariant = 1;
+        kkm.PaymentType = CheckType.SaleReturn;
+        kkm.TaxVariant = TaxSystem.УСН;
         kkm.Customer = new Customer
         {
             Info = "ООО 'Рога и Копыта'",
@@ -32,8 +32,8 @@ public class PrintCheckReturn : Sample
             Department = 1,
             Tax = "20",
             TaxSum = 0,
-            SignMethodCalculation = 1,
-            SignCalculationObject = 10
+            SignMethodCalculation = SignMethodCalculation.FullPrepayment,
+            SignCalculationObject = SignCalculationObject.Advance
         });
         kkm.Positions.Add(new FiscalLine
         {
@@ -46,8 +46,8 @@ public class PrintCheckReturn : Sample
             Department = 1,
             Tax = "none",
             TaxSum = 0,
-            SignMethodCalculation = 1,
-            SignCalculationObject = 10
+            SignMethodCalculation = SignMethodCalculation.FullPrepayment,
+            SignCalculationObject = SignCalculationObject.Advance
         });
         await kkm.PrintCheck();
         return kkm;

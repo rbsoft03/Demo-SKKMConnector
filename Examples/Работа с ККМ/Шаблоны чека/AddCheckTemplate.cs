@@ -15,8 +15,8 @@ public class AddCheckTemplate : Sample
             Name = "sale_template_01",
             Document = new CheckTemplateDocument
             {
-                PaymentType = 1,
-                TaxVariant = 0,
+                PaymentType = CheckType.Sale,
+                TaxVariant = TaxSystem.ОСН,
                 Payments = new Payments { Cash = 101 }
             }
         };
@@ -27,8 +27,8 @@ public class AddCheckTemplate : Sample
             Price = 101,
             Sum = 101,
             Tax = "0",
-            SignMethodCalculation = 4,
-            SignCalculationObject = 33
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.ТМ
         });
         await kkm.AddCheckTemplate();
         return kkm;

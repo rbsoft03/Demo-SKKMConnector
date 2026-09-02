@@ -12,9 +12,9 @@ public class CheckSample22 : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
-        kkm.PaymentType = 1;
-        kkm.TaxVariant = 0;
-        kkm.AgentSign = 2;
+        kkm.PaymentType = CheckType.Sale;
+        kkm.TaxVariant = TaxSystem.ОСН;
+        kkm.AgentSign = AgentType.PaymentAgent;
         kkm.Agent = new Agent
         {
             PayingAgentOperation = "Приём платежей",
@@ -35,10 +35,10 @@ public class CheckSample22 : Sample
             Sum = 90.0m,
             Tax = "none",
             TaxSum = 0m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 4,
-            MeasureOfQuantity = 0,
-            AgentSign = 2,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.Service,
+            MeasureOfQuantity = MeasureOfQuantity.Piece,
+            AgentSign = AgentType.PaymentAgent,
         });
         kkm.Payments = new Payments
         {

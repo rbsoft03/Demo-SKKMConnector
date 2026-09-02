@@ -12,9 +12,9 @@ public class CheckSample03 : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
-        kkm.PaymentType = 1;
-        kkm.TaxVariant = 0;
-        kkm.TimeZone = 9;
+        kkm.PaymentType = CheckType.Sale;
+        kkm.TaxVariant = TaxSystem.ОСН;
+        kkm.TimeZone = CheckTimeZone.MskPlus7;
         kkm.Customer = new Customer
         {
             Info = "ООО 'Рога и Копыта'",
@@ -30,8 +30,8 @@ public class CheckSample03 : Sample
             Department = 0,
             Tax = "20",
             TaxSum = 0m,
-            SignMethodCalculation = 3,
-            SignCalculationObject = 10,
+            SignMethodCalculation = SignMethodCalculation.Advance,
+            SignCalculationObject = SignCalculationObject.Advance,
             MeasurementUnit = "50",
         });
         kkm.Payments = new Payments

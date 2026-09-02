@@ -13,7 +13,7 @@ public class SendPicture : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.PictureName = "demo.png";
-        kkm.PictureAlignment = 2;
+        kkm.PictureAlignment = PictureAlignment.Center;
         kkm.PictureBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==";
         await kkm.SendPicture();
 

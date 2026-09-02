@@ -12,8 +12,8 @@ public class PrintCheckReturnByFpAsync : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
-        kkm.PaymentType = 2;
-        kkm.TaxVariant = 0;
+        kkm.PaymentType = CheckType.SaleReturn;
+        kkm.TaxVariant = TaxSystem.ОСН;
         kkm.Electronically = false;
         kkm.AdditionalAttribute = "1775661887";
         kkm.Customer = new Customer
@@ -40,8 +40,8 @@ public class PrintCheckReturnByFpAsync : Sample
             Department = 1,
             Tax = "20",
             TaxSum = 0,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 4
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.Service
         });
         await kkm.PrintCheckAsync();
         return kkm;

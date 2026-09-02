@@ -12,9 +12,9 @@ public class CheckSample64 : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
-        kkm.PaymentType = 1;
-        kkm.TaxVariant = 0;
-        kkm.TimeZone = 7;
+        kkm.PaymentType = CheckType.Sale;
+        kkm.TaxVariant = TaxSystem.ОСН;
+        kkm.TimeZone = CheckTimeZone.MskPlus5;
         kkm.Electronically = true;
         kkm.OperationOnline = true;
         kkm.SenderEmail = "ivanov@mail.ru";
@@ -69,11 +69,11 @@ public class CheckSample64 : Sample
             Sum = 100.0m,
             Tax = "10",
             TaxSum = 9.09m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 33,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.ТМ,
             MeasurementUnit = "11",
-            MeasureOfQuantity = 11,
-            AgentSign = 6,
+            MeasureOfQuantity = MeasureOfQuantity.Kilogram,
+            AgentSign = AgentType.Agent,
             Vendor = new Vendor
             {
                 Name = "ООО Ромашка",
@@ -100,9 +100,9 @@ public class CheckSample64 : Sample
             Sum = 80.0m,
             Tax = "20",
             TaxSum = 0m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 33,
-            MeasureOfQuantity = 0,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.ТМ,
+            MeasureOfQuantity = MeasureOfQuantity.Piece,
             Fractional = new FractionalQuantity
             {
                 Numerator = 1,
@@ -117,9 +117,9 @@ public class CheckSample64 : Sample
             Sum = 30.0m,
             Tax = "22",
             TaxSum = 5.41m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 1,
-            MeasureOfQuantity = 0,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.Goods,
+            MeasureOfQuantity = MeasureOfQuantity.Piece,
         });
         kkm.Positions.Add(new BarcodeLine
         {

@@ -12,8 +12,8 @@ public class CheckSample19 : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
-        kkm.PaymentType = 1;
-        kkm.TaxVariant = 1;
+        kkm.PaymentType = CheckType.Sale;
+        kkm.TaxVariant = TaxSystem.УСН;
         kkm.Customer = new Customer
         {
             Info = "ООО 'Рога и Копыта'",
@@ -29,8 +29,8 @@ public class CheckSample19 : Sample
             Department = 2,
             Tax = "20",
             TaxSum = 0m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 33,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.ТМ,
             MeasurementUnit = "0",
             Marking = new Marking
             {

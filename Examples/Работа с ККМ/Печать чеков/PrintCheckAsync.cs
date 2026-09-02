@@ -13,8 +13,8 @@ public class PrintCheckAsync : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
-        kkm.PaymentType = 1;
-        kkm.TaxVariant = 3;
+        kkm.PaymentType = CheckType.Sale;
+        kkm.TaxVariant = TaxSystem.ЕНВД;
         kkm.Electronically = false;
         kkm.Customer = new Customer
         {
@@ -40,8 +40,8 @@ public class PrintCheckAsync : Sample
             Department = 1,
             Tax = "0",
             TaxSum = 0,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 4,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.Service,
             MeasurementUnit = "0"
         });
         kkm.Positions.Add(new FiscalLine
@@ -54,10 +54,10 @@ public class PrintCheckAsync : Sample
             Department = 1,
             Tax = "20",
             TaxSum = 5,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 1,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.Goods,
             MeasurementUnit = "11",
-            MeasureOfQuantity = 0
+            MeasureOfQuantity = MeasureOfQuantity.Piece
         });
         await kkm.PrintCheckAsync();
         return kkm;

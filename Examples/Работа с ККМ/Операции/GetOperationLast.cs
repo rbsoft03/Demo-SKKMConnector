@@ -10,7 +10,7 @@ public class GetOperationLast : Sample
 
     public async Task<ServerKkm> GetGetOperationLast()
     {
-        kkm.PaymentType = 1;
+        kkm.PaymentType = CheckType.Sale;
         kkm.IsProcessed = true;
         await kkm.GetOperationLast();
         return kkm;

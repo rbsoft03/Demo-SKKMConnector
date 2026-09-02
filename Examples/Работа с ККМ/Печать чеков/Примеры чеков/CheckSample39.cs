@@ -12,9 +12,9 @@ public class CheckSample39 : Sample
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
         kkm.NewRequest();
-        kkm.PaymentType = 1;
-        kkm.TaxVariant = 0;
-        kkm.TimeZone = 2;
+        kkm.PaymentType = CheckType.Sale;
+        kkm.TaxVariant = TaxSystem.ОСН;
+        kkm.TimeZone = CheckTimeZone.Msk;
         kkm.Electronically = true;
         kkm.OperationOnline = true;
         kkm.SenderEmail = "ivanov@mail.ru";
@@ -61,9 +61,9 @@ public class CheckSample39 : Sample
             Sum = 250.0m,
             Tax = "20",
             TaxSum = 41.67m,
-            SignMethodCalculation = 4,
-            SignCalculationObject = 4,
-            MeasureOfQuantity = 0,
+            SignMethodCalculation = SignMethodCalculation.FullPayment,
+            SignCalculationObject = SignCalculationObject.Service,
+            MeasureOfQuantity = MeasureOfQuantity.Piece,
         });
         kkm.Payments = new Payments
         {

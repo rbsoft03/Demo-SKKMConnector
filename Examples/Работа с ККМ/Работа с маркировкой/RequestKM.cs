@@ -11,7 +11,7 @@ public class RequestKM : Sample
     {
         kkm.DeviceName = deviceName;
         kkm.MarkingCode = "MDEwNDYwNzAxMDM1MDI0NjIxNURzPkpSak5FIWpaIR05M2RHVno=";
-        kkm.PlannedStatus = 1;
+        kkm.PlannedStatus = MarkingPlannedStatus.Sold;
         kkm.MarkingQuantity = 1;
         kkm.WaitForResult = true;
         await kkm.RequestKM();
