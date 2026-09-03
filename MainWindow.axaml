@@ -56,6 +56,7 @@
     </Style>
   </Window.Styles>
 
+  <Panel>
   <Grid Margin="10">
     <Grid.ColumnDefinitions>
       <ColumnDefinition Width="290" MinWidth="230" MaxWidth="440"/>
@@ -174,4 +175,13 @@
       </Grid>
     </Grid>
   </Grid>
+    <!-- Оверлей -->
+    <Canvas x:Name="DocTipLayer" IsHitTestVisible="False">
+      <Border x:Name="DocTip" IsVisible="False"
+              Background="#252526" BorderBrush="#454545" BorderThickness="1"
+              CornerRadius="4" Padding="8,6" MaxWidth="440">
+        <TextBlock x:Name="DocText" TextWrapping="Wrap" Foreground="#D4D4D4" FontSize="12" />
+      </Border>
+    </Canvas>
+  </Panel>
 </Window>

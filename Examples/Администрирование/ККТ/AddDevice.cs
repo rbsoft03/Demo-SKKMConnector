@@ -14,9 +14,9 @@ public class AddDevice : Sample
         kkm.DeviceSettings = new DeviceSettings
         {
             DeviceName = deviceName,
-            DeviceType = 1,
+            DeviceType = DeviceType.Shtrih,
             Available = true,
-            MethodConnection = 0,
+            MethodConnection = ConnectionMethod.Com,
             PortNumber = 1,
             BaudRate = 9600,
             IpAddress = "192.168.0.109",

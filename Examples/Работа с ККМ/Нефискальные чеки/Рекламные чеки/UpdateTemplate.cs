@@ -13,18 +13,18 @@ public class UpdateTemplate : Sample
         kkm.TemplateParameters = new TemplateParameters
         {
             Name = "name120",
-            Type = 0,
+            Type = PrintTemplateType.Advertisement,
             TemplateItems =
             {
                 new TemplateItem
                 {
                     PrintLine = new PrintLine
                     {
-                        Type = 1,
+                        Type = PrintLineType.Text,
                         Line = "Текс222т",
                         LineRight = "",
-                        Alignment = 1,
-                        Font = 5,
+                        Alignment = PrintAlignment.Center,
+                        Font = PrintFont.H1,
                         Wrap = true
                     }
                 },
@@ -32,11 +32,11 @@ public class UpdateTemplate : Sample
                 {
                     PrintLine = new PrintLine
                     {
-                        Type = 1,
+                        Type = PrintLineType.Text,
                         Line = "Сумма",
                         LineRight = "1 250,00",
-                        Alignment = 0,
-                        Font = 0,
+                        Alignment = PrintAlignment.Left,
+                        Font = PrintFont.Normal,
                         Wrap = false
                     }
                 },
@@ -44,21 +44,21 @@ public class UpdateTemplate : Sample
                 {
                     PrintLine = new PrintLine
                     {
-                        Type = 4,
-                        SeparatorLine = new SeparatorLine { LineStyle = 0 }
+                        Type = PrintLineType.Separator,
+                        SeparatorLine = new SeparatorLine { LineStyle = LineStyle.Solid }
                     }
                 },
                 new TemplateItem
                 {
                     PrintLine = new PrintLine
                     {
-                        Type = 2,
-                        Alignment = 1,
+                        Type = PrintLineType.Barcode,
+                        Alignment = PrintAlignment.Center,
                         Barcode = new PrintFormBarcode
                         {
-                            Type = "QR",
+                            Type = BarcodeType.QR,
                             Value = "https://www.rbsoft.ru/",
-                            PrintText = 0,
+                            PrintText = BarcodePrintText.None,
                             Height = 30,
                             BarWidth = 6
                         }
@@ -68,13 +68,13 @@ public class UpdateTemplate : Sample
                 {
                     PrintLine = new PrintLine
                     {
-                        Type = 3,
-                        Alignment = 1,
+                        Type = PrintLineType.Picture,
+                        Alignment = PrintAlignment.Center,
                         Scale = 100,
                         Picture = new Picture
                         {
                             PictureBase64 = "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
-                            Alignment = 2,
+                            Alignment = PictureAlignment.Center,
                             Width = 200,
                             Height = 80
                         }

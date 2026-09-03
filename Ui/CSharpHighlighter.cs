@@ -44,15 +44,21 @@ public static class CSharpHighlighter
     private static readonly IBrush Number = new SolidColorBrush(Color.Parse("#B5CEA8"));
     private static readonly IBrush Key = new SolidColorBrush(Color.Parse("#9CDCFE"));
 
-    // <summary> типов и полей из XML-документации коннектора
-    private static Dictionary<string, string>? _summaries;
+    // <summary> из XML: типы; члены по ключу «Тип.Имя»; UniqueMembers — если имя однозначное.
+    private static readonly Dictionary<string, string> TypeDocs = new(StringComparer.Ordinal);
+    private static readonly Dictionary<string, string> MemberDocs = new(StringComparer.Ordinal);
+    private static readonly Dictionary<string, string> UniqueMembers = new(StringComparer.Ordinal);
     private static readonly HashSet<string> TypeNames = new(StringComparer.Ordinal);
-    private static Dictionary<string, string> Summaries => _summaries ??= LoadSummaries();
+    private static bool _docsLoaded;
 
-    private static Dictionary<string, string> LoadSummaries()
+    private static void EnsureDocs()
     {
-        var types = new Dictionary<string, string>(StringComparer.Ordinal);
-        var members = new Dictionary<string, string?>(StringComparer.Ordinal); // null — неоднозначное имя
+        if (_docsLoaded)
+            return;
+        _docsLoaded = true;
+
+        var firstByShort = new Dictionary<string, string>(StringComparer.Ordinal);
+        var ambiguous = new HashSet<string>(StringComparer.Ordinal);
         try
         {
             var path = Path.Combine(AppContext.BaseDirectory, "SkkmConnector.xml");
@@ -66,7 +72,9 @@ public static class CSharpHighlighter
                         continue;
 
                     char kind = name[0];
-                    if (kind != 'T' && kind != 'P' && kind != 'F')   // типы, свойства, поля
+                    if (kind != 'T' && kind != 'P' && kind != 'F' && kind != 'M')
+                        continue;
+                    if (kind == 'M' && name.Contains("#ctor", StringComparison.Ordinal))
                         continue;
 
                     var doc = BuildDoc(summary);
@@ -76,17 +84,24 @@ public static class CSharpHighlighter
                     var shortName = ShortName(name);
                     if (kind == 'T')
                     {
-                        types[shortName] = doc;
+                        TypeDocs[shortName] = doc;
                         TypeNames.Add(shortName);
+                        continue;
                     }
-                    else if (members.TryGetValue(shortName, out var existing))
+
+                    var qualified = QualifiedName(name);
+                    if (qualified is null || MemberDocs.ContainsKey(qualified))
+                        continue;
+                    MemberDocs[qualified] = doc;
+
+                    if (firstByShort.TryGetValue(shortName, out var prev))
                     {
-                        if (existing != null && existing != doc)
-                            members[shortName] = null; // разные описания под одним именем — пропускаем
+                        if (prev != doc)
+                            ambiguous.Add(shortName);
                     }
                     else
                     {
-                        members[shortName] = doc;
+                        firstByShort[shortName] = doc;
                     }
                 }
             }
@@ -96,21 +111,158 @@ public static class CSharpHighlighter
             // нет файла или битый XML — просто без подсказок
         }
 
-        // типы приоритетнее; неоднозначные поля не добавляем
-        foreach (var kv in members)
-            if (kv.Value != null && !types.ContainsKey(kv.Key))
-                types[kv.Key] = kv.Value;
+        foreach (var kv in firstByShort)
+        {
+            if (!ambiguous.Contains(kv.Key))
+                UniqueMembers[kv.Key] = kv.Value;
+        }
+    }
 
-        return types;
+    /// <summary>Возвращает summary типа/члена под символом code[index] или null.</summary>
+    public static string? SummaryAt(string code, int index)
+    {
+        EnsureDocs();
+        if (string.IsNullOrEmpty(code) || index < 0 || index >= code.Length)
+            return null;
+
+        if (!IsWordChar(code[index]))
+        {
+            if (index > 0 && IsWordChar(code[index - 1])) index--;
+            else return null;
+        }
+
+        int s = index, e = index;
+        while (s > 0 && IsWordChar(code[s - 1])) s--;
+        while (e + 1 < code.Length && IsWordChar(code[e + 1])) e++;
+        if (!(char.IsLetter(code[s]) || code[s] == '_'))
+            return null;
+
+        string word = code.Substring(s, e - s + 1);
+
+        int p = s - 1;
+        while (p >= 0 && char.IsWhiteSpace(code[p])) p--;
+        bool afterDot = p >= 0 && code[p] == '.';
+
+        string? type = afterDot ? TypeBeforeDot(code, p) : EnclosingNewType(code, s);
+        if (type != null && MemberDocs.TryGetValue(type + "." + word, out var typed))
+            return typed;
+        if (!afterDot && TypeDocs.TryGetValue(word, out var tdoc))
+            return tdoc;
+        if (UniqueMembers.TryGetValue(word, out var unique))
+            return unique;
+        if (afterDot && MemberDocs.TryGetValue("ServerKkm." + word, out var kkm))
+            return kkm;
+        return afterDot ? TypeDocs.GetValueOrDefault(word) : null;
+    }
+
+    private static bool IsWordChar(char c) => char.IsLetterOrDigit(c) || c == '_';
+
+    private static string StripDocId(string docName)
+    {
+        var s = docName.Length > 1 && docName[1] == ':' ? docName[2..] : docName;
+        int paren = s.IndexOf('(');
+        return paren >= 0 ? s[..paren] : s;
     }
 
     private static string ShortName(string docName)
     {
-        var s = docName.Length > 1 && docName[1] == ':' ? docName[2..] : docName;
-        int paren = s.IndexOf('(');
-        if (paren >= 0) s = s[..paren];
+        var s = StripDocId(docName);
         int dot = s.LastIndexOf('.');
         return dot >= 0 ? s[(dot + 1)..] : s;
+    }
+
+    private static string? QualifiedName(string docName)
+    {
+        var s = StripDocId(docName);
+        int dot = s.LastIndexOf('.');
+        if (dot < 0)
+            return null;
+        int prev = s.LastIndexOf('.', dot - 1);
+        string type = prev >= 0 ? s[(prev + 1)..dot] : s[..dot];
+        return type + "." + s[(dot + 1)..];
+    }
+
+    private static string? TypeBeforeDot(string code, int dot)
+    {
+        int e = dot - 1;
+        while (e >= 0 && char.IsWhiteSpace(code[e])) e--;
+        int s = e;
+        while (s >= 0 && IsWordChar(code[s])) s--;
+        if (e < s + 1)
+            return null;
+        string left = code.Substring(s + 1, e - s);
+        return TypeNames.Contains(left) ? left : null;
+    }
+
+    // Тип из ближайшего `new TypeName {` — для свойств в object initializer.
+    private static string? EnclosingNewType(string code, int from)
+    {
+        int depth = 0;
+        for (int i = from - 1; i >= 0; i--)
+        {
+            char c = code[i];
+            if (c is '"' or '\'')
+            {
+                char q = c;
+                i--;
+                while (i >= 0 && code[i] != q)
+                    i--;
+                continue;
+            }
+            if (c == '}')
+                depth++;
+            else if (c == '{')
+            {
+                if (depth > 0)
+                {
+                    depth--;
+                    continue;
+                }
+                return TypeBeforeInitializer(code, i);
+            }
+        }
+        return null;
+    }
+
+    private static string? TypeBeforeInitializer(string code, int brace)
+    {
+        int p = brace - 1;
+        while (p >= 0 && char.IsWhiteSpace(code[p])) p--;
+        if (p >= 0 && code[p] == ')')
+        {
+            int paren = 1;
+            p--;
+            while (p >= 0 && paren > 0)
+            {
+                if (code[p] == ')') paren++;
+                else if (code[p] == '(') paren--;
+                p--;
+            }
+            while (p >= 0 && char.IsWhiteSpace(code[p])) p--;
+        }
+        if (p >= 0 && code[p] == '>')
+        {
+            int angle = 1;
+            p--;
+            while (p >= 0 && angle > 0)
+            {
+                if (code[p] == '>') angle++;
+                else if (code[p] == '<') angle--;
+                p--;
+            }
+            while (p >= 0 && char.IsWhiteSpace(code[p])) p--;
+        }
+        int e = p;
+        while (p >= 0 && IsWordChar(code[p])) p--;
+        if (e < p + 1)
+            return null;
+        string type = code.Substring(p + 1, e - p);
+        while (p >= 0 && char.IsWhiteSpace(code[p])) p--;
+        int ks = p;
+        while (ks >= 0 && IsWordChar(code[ks])) ks--;
+        if (ks + 1 > p)
+            return null;
+        return code.Substring(ks + 1, p - ks) == "new" ? type : null;
     }
 
     private static string BuildDoc(XElement el)
@@ -164,6 +316,7 @@ public static class CSharpHighlighter
     public static void Apply(string code, InlineCollection target)
     {
         target.Clear();
+        EnsureDocs();
 
         var buffer = new StringBuilder();
         var brush = Default;
@@ -181,6 +334,7 @@ public static class CSharpHighlighter
 
         int i = 0, n = code.Length;
         string prev = "";
+        bool afterDot = false;
         while (i < n)
         {
             char c = code[i];
@@ -189,53 +343,42 @@ public static class CSharpHighlighter
             if (c == '/' && i + 1 < n && code[i + 1] == '/')          // // комментарий
             {
                 while (i < n && code[i] != '\n') i++;
-                Emit(start, i, Comment); prev = "";
+                Emit(start, i, Comment); prev = ""; afterDot = false;
             }
             else if (c == '/' && i + 1 < n && code[i + 1] == '*')     // /* комментарий */
             {
                 i += 2;
                 while (i < n && !(code[i] == '*' && i + 1 < n && code[i + 1] == '/')) i++;
                 if (i < n) i += 2;
-                Emit(start, i, Comment); prev = "";
+                Emit(start, i, Comment); prev = ""; afterDot = false;
             }
             else if (c == '"' || (c == '@' && i + 1 < n && code[i + 1] == '"') || c == '\'')  // строка / символ
             {
                 i = SkipQuoted(code, i, n);
-                Emit(start, i, Str); prev = "";
+                Emit(start, i, Str); prev = ""; afterDot = false;
             }
             else if (char.IsLetter(c) || c == '_')                    // слово (ключевое / тип / прочее)
             {
                 while (i < n && (char.IsLetterOrDigit(code[i]) || code[i] == '_')) i++;
                 string word = code.Substring(start, i - start);
-                bool hasDoc = Summaries.TryGetValue(word, out var tip);
-                bool isType = Types.Contains(word) || prev == "new" || TypeNames.Contains(word);
+                bool isType = !afterDot && (Types.Contains(word) || prev == "new" || TypeNames.Contains(word));
                 var color = Keywords.Contains(word) ? Keyword
                           : isType ? Type
                           : Default;
-
-                if (hasDoc && !ReferenceEquals(color, Keyword))
-                {
-                    if (buffer.Length > 0) { target.Add(new Run(buffer.ToString()) { Foreground = brush }); buffer.Clear(); }
-                    var chip = new TextBlock { Text = word, Foreground = color, Background = Brushes.Transparent };
-                    ToolTip.SetTip(chip, new TextBlock { Text = tip, MaxWidth = 380, TextWrapping = TextWrapping.Wrap });
-                    target.Add(new InlineUIContainer(chip));
-                    prev = word;
-                }
-                else
-                {
-                    Emit(start, i, color); prev = word;
-                }
+                Emit(start, i, color);
+                prev = word;
+                afterDot = false;
             }
             else if (char.IsDigit(c))                                 // число
             {
                 while (i < n && (char.IsLetterOrDigit(code[i]) || code[i] == '.' || code[i] == '_')) i++;
-                Emit(start, i, Number); prev = "";
+                Emit(start, i, Number); prev = ""; afterDot = false;
             }
             else                                                      // пробелы, скобки, операторы
             {
                 i++;
                 Emit(start, i, Default);
-                if (!char.IsWhiteSpace(c)) prev = "";
+                if (!char.IsWhiteSpace(c)) { prev = ""; afterDot = c == '.'; }
             }
         }
 

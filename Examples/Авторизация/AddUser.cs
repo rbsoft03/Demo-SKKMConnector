@@ -16,7 +16,7 @@ public class AddUser : Sample
             FullName = "Алексей Петров",
             Password = "Admin",
             Vatin = "222222",
-            Role = 1
+            Role = ServiceUserRole.Employee
         };
         await kkm.AddUser();
         return kkm;

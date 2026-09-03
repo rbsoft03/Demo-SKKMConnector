@@ -27,7 +27,7 @@ public class FiscalizationAsync : Sample
             IsOffline = false,
             IsBsoSign = true,
             RegistrationLabelCodes = "3.1",
-            ReasonCode = 3,
+            ReasonCode = FiscalizationReasonCode.RequisitesChange,
             OfdName = "Тестовый ОФД",
             OfdVatin = "1234554321",
             FnsUrl = "nalog.ru",

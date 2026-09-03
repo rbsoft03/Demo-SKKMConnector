@@ -17,7 +17,7 @@ public class UpdateUser : Sample
             Password = "Admin21",
             FullName = "Челпанов Артем",
             Vatin = "221431",
-            Role = 1
+            Role = ServiceUserRole.Employee
         };
         await kkm.UpdateUser();
         return kkm;

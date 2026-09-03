@@ -100,12 +100,12 @@ dotnet run
 Каждый пример — это класс-наследник `Sample`:
 
 ```csharp
-public class CheckSample01 : Sample
+public class SaleBasic : Sample
 {
     public const string GroupPath = "Работа с ККМ|Печать чеков|Примеры чеков";
     public const string Title = "Продажа (базовый чек)";
 
-    public async Task<ServerKkm> PostCheckSample01()
+    public async Task<ServerKkm> PostSaleBasic()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
