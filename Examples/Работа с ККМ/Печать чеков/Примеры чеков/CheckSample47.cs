@@ -5,7 +5,7 @@ namespace SkkmNugetSample.Examples;
 public class CheckSample47 : Sample
 {
     public const string GroupPath = "Работа с ККМ|Печать чеков|Примеры чеков";
-    public const string Title = "Комплексный чек со всеми поддерживаемыми реквизитами";
+    public const string Title = "Все способы электронной оплаты (0-6)";
 
     public async Task<ServerKkm> PostCheckSample47()
     {

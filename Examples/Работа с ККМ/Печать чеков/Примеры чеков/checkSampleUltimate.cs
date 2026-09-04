@@ -5,10 +5,10 @@ namespace SkkmNugetSample.Examples;
 /// <summary>
 /// Комплексный чек: объекты расчёта, НДС, агент, маркировка, безнал, нефискальные строки.
 /// </summary>
-public class ComplexCheck : Sample
+public class checkSampleUltimate : Sample
 {
     public const string GroupPath = "Работа с ККМ|Печать чеков|Примеры чеков";
-    public const string Title = "Комплексный чек со всеми поддерживаемыми реквизитами";
+    public const string Title = "Комплексный чек: все объекты, НДС, агент, маркировка";
 
     public async Task<ServerKkm> PostComplexCheck()
     {
