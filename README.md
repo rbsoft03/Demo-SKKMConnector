@@ -219,3 +219,11 @@ public class MyXReport : Sample
 - **Material.Icons.Avalonia** — иконки.
 - **SkkmConnector 1.26.4** — сам коннектор, подключён из локального NuGet-папки `./packages`.
 - **.NET 6** (`net6.0`).
+
+## Лицензия
+ 
+Распространяется свободно по лицензии **MIT** — см.
+[README коннектора](https://github.com/sodiUmU/SKKMConnector/blob/main/README.md).
+ 
+**Разработчик:** Ершов Евгений / RBSoft · [rbsoft.ru](https://rbsoft.ru) ·
+[online@rbsoft.ru](mailto:online@rbsoft.ru)
