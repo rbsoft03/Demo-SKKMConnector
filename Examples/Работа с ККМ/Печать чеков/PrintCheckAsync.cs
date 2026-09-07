@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class PrintCheckAsync : Sample
     public const string Title = "Асинхронная печать чека";
     public const int SortOrder = 1;
 
-    public async Task<ServerKkm> PostPrintCheckAsync()
+    public async Task<SkkmConnector> PostPrintCheckAsync()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };

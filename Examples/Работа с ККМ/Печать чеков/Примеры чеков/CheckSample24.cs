@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -7,7 +7,7 @@ public class CheckSample24 : Sample
     public const string GroupPath = "Работа с ККМ|Печать чеков|Примеры чеков";
     public const string Title = "ПСН";
 
-    public async Task<ServerKkm> PostCheckSample24()
+    public async Task<SkkmConnector> PostCheckSample24()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };

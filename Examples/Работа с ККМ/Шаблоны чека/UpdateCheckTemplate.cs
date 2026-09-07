@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -7,7 +7,7 @@ public class UpdateCheckTemplate : Sample
     public const string GroupPath = "Работа с ККМ|Шаблоны чека";
     public const string Title = "Изменение шаблона чека";
 
-    public async Task<ServerKkm> PutUpdateCheckTemplate()
+    public async Task<SkkmConnector> PutUpdateCheckTemplate()
     {
         kkm.NewRequest();
         kkm.CheckTemplateParameters = new CheckTemplateParameters

@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class ChecksByShift : Sample
     public const string Title = "Чеки за смену";
     public const int SortOrder = 7;
 
-    public async Task<ServerKkm> GetChecksByShift()
+    public async Task<SkkmConnector> GetChecksByShift()
     {
         kkm.DeviceName = deviceName;
         kkm.ShiftNumber = 1;

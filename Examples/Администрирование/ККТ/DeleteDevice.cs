@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class DeleteDevice : Sample
     public const string Title = "Удаление ККТ";
     public const int SortOrder = 4;
 
-    public async Task<ServerKkm> DeleteDeleteDevice()
+    public async Task<SkkmConnector> DeleteDeleteDevice()
     {
         kkm.DeviceName = deviceName;
         await kkm.DeleteDevice();

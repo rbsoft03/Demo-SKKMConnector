@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -9,7 +9,7 @@ public class TaskStatus : Sample
     public const int SortOrder = 2;
     public const bool NeedDocumentId = true;
 
-    public async Task<ServerKkm> GetTaskStatus()
+    public async Task<SkkmConnector> GetTaskStatus()
     {
         kkm.DeviceName = deviceName;
         kkm.DocumentId = documentId;

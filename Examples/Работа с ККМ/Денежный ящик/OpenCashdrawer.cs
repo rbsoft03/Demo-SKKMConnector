@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class OpenCashdrawer : Sample
     public const string Title = "Открыть ящик";
     public const int SortOrder = 0;
 
-    public async Task<ServerKkm> PostOpenCashdrawer()
+    public async Task<SkkmConnector> PostOpenCashdrawer()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };

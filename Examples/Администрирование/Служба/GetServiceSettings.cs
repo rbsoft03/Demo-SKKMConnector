@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetServiceSettings : Sample
     public const string Title = "Получение настроек службы";
     public const int SortOrder = 0;
 
-    public async Task<ServerKkm> GetGetServiceSettings()
+    public async Task<SkkmConnector> GetGetServiceSettings()
     {
         await kkm.GetServiceSettings();
         return kkm;

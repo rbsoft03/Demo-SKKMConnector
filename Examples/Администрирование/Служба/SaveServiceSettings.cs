@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class SaveServiceSettings : Sample
     public const string Title = "Сохранение настроек службы";
     public const int SortOrder = 1;
 
-    public async Task<ServerKkm> PostSaveServiceSettings()
+    public async Task<SkkmConnector> PostSaveServiceSettings()
     {
         kkm.ServiceSettings = new ServiceSettings
         {

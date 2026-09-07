@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -9,7 +9,7 @@ public class GetCashIn : Sample
     public const bool NeedDocumentId = true;
     public const int SortOrder = 5;
 
-    public async Task<ServerKkm> GetCashInById()
+    public async Task<SkkmConnector> GetCashInById()
     {
         kkm.DeviceName = deviceName;
         kkm.DocumentId = documentId;

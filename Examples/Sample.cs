@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ namespace SkkmNugetSample.Examples;
 /// </summary>
 public class Sample
 {
-    public ServerKkm kkm { get; set; } = null!;
+    public SkkmConnector kkm { get; set; } = null!;
 
     /// <summary>Имя ККМ, {{SKKMDEVICE}}.</summary>
     public string deviceName = "";

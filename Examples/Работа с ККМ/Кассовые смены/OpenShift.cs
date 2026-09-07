@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class OpenShift : Sample
     public const string Title = "Открыть смену";
     public const int SortOrder = 0;
 
-    public async Task<ServerKkm> PostOpenShift()
+    public async Task<SkkmConnector> PostOpenShift()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };

@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class AddUser : Sample
     public const string Title = "Добавление пользователя";
     public const int SortOrder = 2;
 
-    public async Task<ServerKkm> PostAddUser()
+    public async Task<SkkmConnector> PostAddUser()
     {
         kkm.ServiceUser = new ServiceUser
         {

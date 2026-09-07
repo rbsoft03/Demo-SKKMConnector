@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class SendPicture : Sample
     public const string Title = "Загрузить картинку";
     public const int SortOrder = 0;
 
-    public async Task<ServerKkm> PostSendPicture()
+    public async Task<SkkmConnector> PostSendPicture()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };

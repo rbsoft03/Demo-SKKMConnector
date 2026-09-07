@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetTemplateList : Sample
     public const string Title = "Список шаблонов печати";
     public const int SortOrder = 3;
 
-    public async Task<ServerKkm> GetGetTemplateList()
+    public async Task<SkkmConnector> GetGetTemplateList()
     {
         await kkm.GetTemplateList();
         return kkm;

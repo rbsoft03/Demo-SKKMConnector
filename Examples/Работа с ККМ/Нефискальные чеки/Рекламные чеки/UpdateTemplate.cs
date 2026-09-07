@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class UpdateTemplate : Sample
     public const string Title = "Редактирование шаблона печати";
     public const int SortOrder = 1;
 
-    public async Task<ServerKkm> PutUpdateTemplate()
+    public async Task<SkkmConnector> PutUpdateTemplate()
     {
         kkm.TemplateParameters = new TemplateParameters
         {

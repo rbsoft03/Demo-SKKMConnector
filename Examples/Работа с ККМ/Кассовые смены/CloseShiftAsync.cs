@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class CloseShiftAsync : Sample
     public const string Title = "Асинхронное закрытие смены";
     public const int SortOrder = 5;
 
-    public async Task<ServerKkm> PostCloseShiftAsync()
+    public async Task<SkkmConnector> PostCloseShiftAsync()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };

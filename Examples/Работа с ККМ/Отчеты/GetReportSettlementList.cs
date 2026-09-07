@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetReportSettlementList : Sample
     public const string Title = "Список отчётов расчётов";
     public const int SortOrder = 3;
 
-    public async Task<ServerKkm> GetReportSettlementListByPeriod()
+    public async Task<SkkmConnector> GetReportSettlementListByPeriod()
     {
         kkm.DeviceName = deviceName;
         kkm.ShiftsFrom = fromDate;

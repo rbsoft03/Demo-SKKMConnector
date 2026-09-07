@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -9,7 +9,7 @@ public class PrintForm : Sample
     public const int SortOrder = 3;
     public const bool NeedDocumentId = true;
 
-    public async Task<ServerKkm> GetPrintForm()
+    public async Task<SkkmConnector> GetPrintForm()
     {
         kkm.DeviceName = deviceName;
         kkm.DocumentId = documentId;

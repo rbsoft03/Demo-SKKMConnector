@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class Fiscalization : Sample
     public const string Title = "Фискализация кассы";
     public const int SortOrder = 0;
 
-    public async Task<ServerKkm> PostFiscalization()
+    public async Task<SkkmConnector> PostFiscalization()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };

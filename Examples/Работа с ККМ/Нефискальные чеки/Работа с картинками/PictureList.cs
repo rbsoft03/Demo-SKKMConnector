@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class PictureList : Sample
     public const string Title = "Список картинок";
     public const int SortOrder = 2;
 
-    public async Task<ServerKkm> GetPictureList()
+    public async Task<SkkmConnector> GetPictureList()
     {
         kkm.DeviceName = deviceName;
         await kkm.GetPictureList();

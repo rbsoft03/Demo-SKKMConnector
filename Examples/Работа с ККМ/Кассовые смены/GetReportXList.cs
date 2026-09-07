@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetReportXList : Sample
     public const string Title = "Список X-отчётов";
     public const int SortOrder = 11;
 
-    public async Task<ServerKkm> GetReportXListByPeriod()
+    public async Task<SkkmConnector> GetReportXListByPeriod()
     {
         kkm.DeviceName = deviceName;
         kkm.ShiftsFrom = fromDate;

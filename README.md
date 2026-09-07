@@ -32,7 +32,7 @@
   печать чеков, коррекции (ФФД 1.2 и 1.0.5), возвраты, наличные, нефискальные чеки
   (слипы, картинки, рекламные), маркировка, фискализация, очередь, шаблоны, операции.
 - **Код запроса** — в панели «Запрос» показан реальный C#-код примера: как
-  заполняются свойства `ServerKkm` и какой метод вызывается (с подсветкой синтаксиса).
+  заполняются свойства `SkkmConnector` и какой метод вызывается (с подсветкой синтаксиса).
 - **Ответ сервера** — в панели «Ответ» выводится результат вызова (JSON/поля).
 - **Живой сервер** — примеры реально обращаются к Серверу ККМ по указанному адресу.
 
@@ -50,14 +50,14 @@
 
 ## Запуск
 
-Приложение ссылается на NuGet-пакет `SkkmConnector` **1.26.4** и ищет его в локальной
+Приложение ссылается на NuGet-пакет `SkkmConnector` **1.27.0** и ищет его в локальной
 папке `packages` рядом с проектом (`nuget.config`):
 
 ```xml
 <add key="local-skkm" value="./packages" />
 ```
 
-1. Положите файл `SkkmConnector.1.26.4.nupkg` в папку `SkkmNugetSample/packages`
+1. Положите файл `SkkmConnector.1.27.0.nupkg` в папку `SkkmNugetSample/packages`
    (если его там ещё нет - соберите пакет коннектора:
 
 ```powershell
@@ -81,7 +81,7 @@ dotnet run
 
 ## Настройка подключения
 
-В верхней панели задаётся подключение — те же свойства, что у `ServerKkm`.
+В верхней панели задаётся подключение — те же свойства, что у `SkkmConnector`.
 Значения по умолчанию (подсказки в полях):
 
 ![Панель подключения](images/connection-panel.png)
@@ -111,17 +111,32 @@ dotnet run
 При старте `ExampleHost` сканирует сборку: находит все классы-наследники `Sample`
 и сам собирает дерево — новый класс подхватывается без регистрации где-либо ещё.
 
-Каждый пример - класс-наследник `Sample` с константами пути/названия и одним
-публичным методом, возвращающим `Task<ServerKkm>` (префикс имени задаёт HTTP-метку
+В панели «Запрос» пример показывается как обычный клиентский код:
+
+```csharp
+using RBSoftSkkm;
+
+using var kkm = new SkkmConnector();
+kkm.DeviceName = deviceName;
+// …
+await kkm.PrintCheck();
+```
+
+Каждый пример — класс-наследник `Sample` с константами пути/названия и одним
+публичным методом, возвращающим `Task<SkkmConnector>` (префикс имени задаёт HTTP-метку
 в дереве: `Get…` — GET, `Put…` — PUT, `Delete…` — DELETE, иначе POST):
 
 ```csharp
+using RBSoftSkkm;
+
+namespace SkkmNugetSample.Examples;
+
 public class CheckSample01 : Sample
 {
     public const string GroupPath = "Работа с ККМ|Печать чеков|Примеры чеков";
     public const string Title = "Продажа (базовый чек)";
 
-    public async Task<ServerKkm> PostCheckSample01()
+    public async Task<SkkmConnector> PostCheckSample01()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
@@ -153,7 +168,7 @@ public class CheckSample01 : Sample
 
 - **`GroupPath`** — путь в дереве слева (разделитель `|`).
 - **`Title`** — название примера в дереве.
-- **Метод** — заполняет свойства `ServerKkm` (`kkm`) и вызывает метод коннектора;
+- **Метод** — заполняет свойства `SkkmConnector` (`kkm`) и вызывает метод коннектора;
   хост, порт, токен, касса и кассир подставляются из панели настроек через поля
   базового `Sample` (`deviceName`, `cashierName`, `cashierVatin`, `documentId`,
   `fromDate` / `toDate`).
@@ -169,7 +184,7 @@ public class CheckSample01 : Sample
 (например, `Examples/Работа с ККМ/Кассовые смены/MyXReport.cs`) и добавьте класс:
 
 ```csharp
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -183,7 +198,7 @@ public class MyXReport : Sample
     public const int SortOrder = 10;
 
     // Префикс метода: Get… / Put… / Delete… / иначе POST
-    public async Task<ServerKkm> PostMyXReport()
+    public async Task<SkkmConnector> PostMyXReport()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };
@@ -217,5 +232,5 @@ public class MyXReport : Sample
 
 - **Avalonia 11** (`Avalonia`, `Avalonia.Desktop`, `Avalonia.Themes.Fluent`) — интерфейс.
 - **Material.Icons.Avalonia** — иконки.
-- **SkkmConnector 1.26.4** — сам коннектор, подключён из локального NuGet-папки `./packages`.
+- **SkkmConnector 1.27.0** — сам коннектор, подключён из локального NuGet-папки `./packages`.
 - **.NET 6** (`net6.0`).

@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -10,7 +10,7 @@ public class checkSampleUltimate : Sample
     public const string GroupPath = "Работа с ККМ|Печать чеков|Примеры чеков";
     public const string Title = "Комплексный чек: все объекты, НДС, агент, маркировка";
 
-    public async Task<ServerKkm> PostComplexCheck()
+    public async Task<SkkmConnector> PostComplexCheck()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = "Иванов И. И.", Vatin = "500100732259" };

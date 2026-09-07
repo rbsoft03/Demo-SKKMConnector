@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class ShiftStatus : Sample
     public const string Title = "Статус смены";
     public const int SortOrder = 8;
 
-    public async Task<ServerKkm> GetShiftStatus()
+    public async Task<SkkmConnector> GetShiftStatus()
     {
         kkm.DeviceName = deviceName;
         await kkm.GetShiftStatus();

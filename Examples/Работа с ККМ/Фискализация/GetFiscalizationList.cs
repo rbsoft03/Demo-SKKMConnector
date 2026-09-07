@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetFiscalizationList : Sample
     public const string Title = "Список фискализаций";
     public const int SortOrder = 3;
 
-    public async Task<ServerKkm> GetGetFiscalizationList()
+    public async Task<SkkmConnector> GetGetFiscalizationList()
     {
         kkm.DeviceName = deviceName;
         await kkm.GetFiscalizationList();

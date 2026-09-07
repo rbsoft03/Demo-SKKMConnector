@@ -8,7 +8,7 @@ using Avalonia.Markup.Xaml;
 using Avalonia.Media;
 using Avalonia.Media.Immutable;
 using Avalonia.Media.TextFormatting;
-using SkkmConnector;
+using RBSoftSkkm;
 using SkkmNugetSample.Ui;
 
 namespace SkkmNugetSample;

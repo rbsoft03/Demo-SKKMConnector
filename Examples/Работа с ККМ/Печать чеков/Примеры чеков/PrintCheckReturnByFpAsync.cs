@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -7,7 +7,7 @@ public class PrintCheckReturnByFpAsync : Sample
     public const string GroupPath = "Работа с ККМ|Печать чеков|Примеры чеков";
     public const string Title = "Асинхронная печать чека возврата по ФП";
 
-    public async Task<ServerKkm> PostPrintCheckReturnByFpAsync()
+    public async Task<SkkmConnector> PostPrintCheckReturnByFpAsync()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };

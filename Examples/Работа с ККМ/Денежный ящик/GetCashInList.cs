@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetCashInList : Sample
     public const string Title = "Список внесений";
     public const int SortOrder = 4;
 
-    public async Task<ServerKkm> GetCashInListByDevice()
+    public async Task<SkkmConnector> GetCashInListByDevice()
     {
         kkm.DeviceName = deviceName;
         await kkm.GetCashInList();

@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class SetDeviceFont : Sample
     public const string Title = "Настройки шрифта шаблона";
     public const int SortOrder = 11;
 
-    public async Task<ServerKkm> PostSetDeviceFont()
+    public async Task<SkkmConnector> PostSetDeviceFont()
     {
         kkm.DeviceName = deviceName;
         kkm.DeviceSettings = new DeviceSettings

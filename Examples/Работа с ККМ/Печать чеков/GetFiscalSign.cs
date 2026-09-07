@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetFiscalSign : Sample
     public const string Title = "Фискальный признак";
     public const int SortOrder = 6;
 
-    public async Task<ServerKkm> GetFiscalSignByDocNumber()
+    public async Task<SkkmConnector> GetFiscalSignByDocNumber()
     {
         kkm.DeviceName = deviceName;
         kkm.CheckNumber = 1;

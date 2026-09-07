@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class PrintSlip : Sample
     public const string Title = "Печать нефискального документа";
     public const int SortOrder = 0;
 
-    public async Task<ServerKkm> PostPrintSlip()
+    public async Task<SkkmConnector> PostPrintSlip()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };

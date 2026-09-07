@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class ReportSettlement : Sample
     public const string Title = "Отчёт расчётов";
     public const int SortOrder = 0;
 
-    public async Task<ServerKkm> PostReportSettlement()
+    public async Task<SkkmConnector> PostReportSettlement()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };

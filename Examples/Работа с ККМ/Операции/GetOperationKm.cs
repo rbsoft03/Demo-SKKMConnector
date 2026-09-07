@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -9,7 +9,7 @@ public class GetOperationKm : Sample
     public const bool NeedDocumentId = true;
     public const int SortOrder = 4;
 
-    public async Task<ServerKkm> GetGetOperationKm()
+    public async Task<SkkmConnector> GetGetOperationKm()
     {
         kkm.DocumentId = documentId;
         await kkm.GetOperationKm();

@@ -1,5 +1,5 @@
 using System.Reflection;
-using SkkmConnector;
+using RBSoftSkkm;
 using SkkmNugetSample.Examples;
 
 namespace SkkmNugetSample.Ui;
@@ -143,7 +143,7 @@ public static class Examples
     private static ExampleItem From(Type type)
     {
         var method = type.GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly)
-            .Single(m => m.ReturnType == typeof(Task<ServerKkm>));
+            .Single(m => m.ReturnType == typeof(Task<SkkmConnector>));
 
         var groupPath = Field(type, "GroupPath") as string;
         if (string.IsNullOrWhiteSpace(groupPath))
@@ -175,7 +175,7 @@ public static class Examples
 
 public static class ExampleRunner
 {
-    public static ServerKkm Session { get; } = new();
+    public static SkkmConnector Session { get; } = new();
 
     public static void ApplyConnection(Sample sample, ConnectionSettings connection)
     {
@@ -193,6 +193,6 @@ public static class ExampleRunner
         Session.ShiftsTo = connection.To;
     }
 
-    public static Task<ServerKkm> Invoke(ExampleItem example)
-        => (Task<ServerKkm>)example.Method.Invoke(example.Instance, null)!;
+    public static Task<SkkmConnector> Invoke(ExampleItem example)
+        => (Task<SkkmConnector>)example.Method.Invoke(example.Instance, null)!;
 }

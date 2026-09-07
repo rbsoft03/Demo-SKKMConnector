@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -9,7 +9,7 @@ public class GetReportZ : Sample
     public const bool NeedDocumentId = true;
     public const int SortOrder = 6;
 
-    public async Task<ServerKkm> GetGetReportZ()
+    public async Task<SkkmConnector> GetGetReportZ()
     {
         kkm.DeviceName = deviceName;
         kkm.DocumentId = documentId;

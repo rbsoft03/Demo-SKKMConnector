@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class UpdateUser : Sample
     public const string Title = "Редактирование пользователя";
     public const int SortOrder = 4;
 
-    public async Task<ServerKkm> PutUpdateUser()
+    public async Task<SkkmConnector> PutUpdateUser()
     {
         kkm.UserId = "83f43a79-027c-449e-ab97-c3f2a4b6e81c";
         kkm.ServiceUser = new ServiceUser

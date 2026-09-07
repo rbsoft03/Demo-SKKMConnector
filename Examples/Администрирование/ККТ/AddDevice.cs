@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class AddDevice : Sample
     public const string Title = "Добавление ККТ";
     public const int SortOrder = 3;
 
-    public async Task<ServerKkm> PostAddDevice()
+    public async Task<SkkmConnector> PostAddDevice()
     {
         kkm.DeviceName = deviceName;
         kkm.DeviceSettings = new DeviceSettings

@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetCheckCorrection105 : Sample
     public const string Title = "Получение чека коррекции 1.0.5";
     public const bool NeedDocumentId = true;
 
-    public async Task<ServerKkm> GetCheckCorrection105ById()
+    public async Task<SkkmConnector> GetCheckCorrection105ById()
     {
         kkm.DeviceName = deviceName;
         kkm.DocumentId = documentId;

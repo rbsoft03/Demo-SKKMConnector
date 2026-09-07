@@ -1,7 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Nodes;
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample;
 
@@ -13,7 +13,7 @@ public static class ResponseText
         Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
 
-    public static string Format(ServerKkm kkm)
+    public static string Format(SkkmConnector kkm)
     {
         var envelope = new JsonObject();
 

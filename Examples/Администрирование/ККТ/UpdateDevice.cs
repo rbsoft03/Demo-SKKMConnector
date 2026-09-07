@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class UpdateDevice : Sample
     public const string Title = "Редактирование ККТ";
     public const int SortOrder = 5;
 
-    public async Task<ServerKkm> PutUpdateDevice()
+    public async Task<SkkmConnector> PutUpdateDevice()
     {
         kkm.DeviceName = deviceName;
         kkm.DeviceSettings = new DeviceSettings

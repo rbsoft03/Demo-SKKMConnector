@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class PrintCheckCopy : Sample
     public const string Title = "Копия последнего чека";
     public const int SortOrder = 2;
 
-    public async Task<ServerKkm> PostPrintCheckCopy()
+    public async Task<SkkmConnector> PostPrintCheckCopy()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };

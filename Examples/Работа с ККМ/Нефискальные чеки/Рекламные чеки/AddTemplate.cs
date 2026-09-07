@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class AddTemplate : Sample
     public const string Title = "Создание шаблона печати";
     public const int SortOrder = 0;
 
-    public async Task<ServerKkm> PostAddTemplate()
+    public async Task<SkkmConnector> PostAddTemplate()
     {
         kkm.TemplateParameters = new TemplateParameters
         {

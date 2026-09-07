@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -9,7 +9,7 @@ public class GetSlip : Sample
     public const bool NeedDocumentId = true;
     public const int SortOrder = 3;
 
-    public async Task<ServerKkm> GetGetSlip()
+    public async Task<SkkmConnector> GetGetSlip()
     {
         kkm.DeviceName = deviceName;
         kkm.DocumentId = documentId;

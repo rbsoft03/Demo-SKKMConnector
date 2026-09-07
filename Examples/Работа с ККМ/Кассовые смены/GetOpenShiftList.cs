@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetOpenShiftList : Sample
     public const string Title = "Список открытий смен";
     public const int SortOrder = 2;
 
-    public async Task<ServerKkm> GetOpenShiftListByPeriod()
+    public async Task<SkkmConnector> GetOpenShiftListByPeriod()
     {
         kkm.DeviceName = deviceName;
         kkm.ShiftsFrom = fromDate;

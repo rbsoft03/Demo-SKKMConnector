@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -7,7 +7,7 @@ public class PrintCheckCorrection105Async : Sample
     public const string GroupPath = "Работа с ККМ|Корректировочные чеки|Корректировки ФФД 1.0.5";
     public const string Title = "Асинхронная печать коррекции 1.0.5";
 
-    public async Task<ServerKkm> PostPrintCheckCorrection105Async()
+    public async Task<SkkmConnector> PostPrintCheckCorrection105Async()
     {
         kkm.DeviceName = deviceName;
         kkm.Cashier = new Cashier { Name = cashierName, Vatin = cashierVatin };

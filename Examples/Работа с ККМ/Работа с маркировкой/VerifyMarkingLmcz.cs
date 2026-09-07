@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class VerifyMarkingLmcz : Sample
     public const string Title = "Проверка КМ через ЛМ ЧЗ";
     public const int SortOrder = 7;
 
-    public async Task<ServerKkm> PostVerifyMarkingLmcz()
+    public async Task<SkkmConnector> PostVerifyMarkingLmcz()
     {
         kkm.DeviceName = deviceName;
         kkm.MarkingCodes.Clear();

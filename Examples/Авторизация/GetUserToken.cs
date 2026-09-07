@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetUserToken : Sample
     public const string Title = "Получение токена";
     public const int SortOrder = 0;
 
-    public async Task<ServerKkm> GetGetUserToken()
+    public async Task<SkkmConnector> GetGetUserToken()
     {
         kkm.AuthUserName = "Admin";
         kkm.AuthPassword = "Admin";

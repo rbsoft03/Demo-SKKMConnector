@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -9,7 +9,7 @@ public class GetFiscalization : Sample
     public const bool NeedDocumentId = true;
     public const int SortOrder = 2;
 
-    public async Task<ServerKkm> GetGetFiscalization()
+    public async Task<SkkmConnector> GetGetFiscalization()
     {
         kkm.DeviceName = deviceName;
         kkm.DocumentId = documentId;

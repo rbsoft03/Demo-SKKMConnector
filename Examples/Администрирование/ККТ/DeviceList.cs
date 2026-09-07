@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class DeviceList : Sample
     public const string Title = "Список ККМ";
     public const int SortOrder = 0;
 
-    public async Task<ServerKkm> GetDeviceList()
+    public async Task<SkkmConnector> GetDeviceList()
     {
         await kkm.GetDeviceList();
 

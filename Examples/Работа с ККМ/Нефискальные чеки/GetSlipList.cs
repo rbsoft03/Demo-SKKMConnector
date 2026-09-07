@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetSlipList : Sample
     public const string Title = "Список нефискальных документов";
     public const int SortOrder = 2;
 
-    public async Task<ServerKkm> GetGetSlipList()
+    public async Task<SkkmConnector> GetGetSlipList()
     {
         kkm.DeviceName = deviceName;
         await kkm.GetSlipList();

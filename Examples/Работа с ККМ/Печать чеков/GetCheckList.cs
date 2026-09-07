@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetCheckList : Sample
     public const string Title = "Список чеков за период";
     public const int SortOrder = 5;
 
-    public async Task<ServerKkm> GetGetCheckList()
+    public async Task<SkkmConnector> GetGetCheckList()
     {
         kkm.DeviceName = deviceName;
         kkm.ShiftsFrom = fromDate;

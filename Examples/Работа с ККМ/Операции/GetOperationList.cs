@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class GetOperationList : Sample
     public const string Title = "Список операций";
     public const int SortOrder = 6;
 
-    public async Task<ServerKkm> GetGetOperationList()
+    public async Task<SkkmConnector> GetGetOperationList()
     {
         kkm.ShiftsFrom = fromDate;
         kkm.ShiftsTo = toDate;

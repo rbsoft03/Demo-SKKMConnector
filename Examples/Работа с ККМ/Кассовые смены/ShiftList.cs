@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -8,7 +8,7 @@ public class ShiftList : Sample
     public const string Title = "Список закрытий смен";
     public const int SortOrder = 7;
 
-    public async Task<ServerKkm> GetShiftList()
+    public async Task<SkkmConnector> GetShiftList()
     {
         kkm.DeviceName = deviceName;
         kkm.ShiftsFrom = fromDate;

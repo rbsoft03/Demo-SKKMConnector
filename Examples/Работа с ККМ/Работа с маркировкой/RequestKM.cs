@@ -1,4 +1,4 @@
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample.Examples;
 
@@ -7,7 +7,7 @@ public class RequestKM : Sample
     public const string GroupPath = "Работа с ККМ|Работа с маркировкой";
     public const string Title = "Проверка КМ";
 
-    public async Task<ServerKkm> PostRequestKM()
+    public async Task<SkkmConnector> PostRequestKM()
     {
         kkm.DeviceName = deviceName;
         kkm.MarkingCode = "MDEwNDYwNzAxMDM1MDI0NjIxNURzPkpSak5FIWpaIR05M2RHVno=";

@@ -29,7 +29,7 @@ public static class CSharpHighlighter
 
     private static readonly HashSet<string> Types = new()
     {
-        "ServerKkm", "Task", "InvalidOperationException", "Exception",
+        "SkkmConnector", "Task", "InvalidOperationException", "Exception",
         "FiscalLine", "TextLine", "BarcodeLine", "SeparatorLine", "PictureLine",
         "PrintLine", "TemplateItem", "PrintFormBarcode", "Picture", "Payments", "Vendor", "Agent", "Marking", "Industry", "UserAttribute",
         "OperationalAttribute", "ElectronicPayment", "FractionalQuantity",
@@ -150,7 +150,7 @@ public static class CSharpHighlighter
             return tdoc;
         if (UniqueMembers.TryGetValue(word, out var unique))
             return unique;
-        if (afterDot && MemberDocs.TryGetValue("ServerKkm." + word, out var kkm))
+        if (afterDot && MemberDocs.TryGetValue("SkkmConnector." + word, out var kkm))
             return kkm;
         return afterDot ? TypeDocs.GetValueOrDefault(word) : null;
     }

@@ -1,5 +1,5 @@
 using System.Globalization;
-using SkkmConnector;
+using RBSoftSkkm;
 
 namespace SkkmNugetSample;
 
