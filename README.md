@@ -64,7 +64,7 @@
 dotnet pack C:\Users\user\Documents\Connector\SkkmConnector\SkkmConnector.csproj -c Release -o "C:\Users\user\Documents\Connector\SkkmNugetSample\packages"
 ```
 
-   Подробности — в [README коннектора](READMEConnectorCSharp.md)).
+   Подробности — в [README коннектора]([READMEConnectorCSharp.md](https://github.com/rbsoft03/SKKMConnector/blob/main/README.md))).
 2. Восстановите зависимости и запустите:
 
 ```powershell
@@ -132,9 +132,9 @@ public class CheckSample01 : Sample
         kkm.Positions.Add(new FiscalLine
         {
             Name = "Бутылка с водой 1л.",
-            Quantity = 1m,
-            Price = 30m,
-            Sum = 30m,
+            Quantity = 1,
+            Price = 30,
+            Sum = 30,
             Tax = "20",
             SignMethodCalculation = SignMethodCalculation.FullPayment,
             SignCalculationObject = SignCalculationObject.Goods,
@@ -209,7 +209,7 @@ public class MyXReport : Sample
 3. В панели «Запрос» будет виден исходный код этого файла, в «Ответ» — результат вызова.
 
 Полное описание методов, полей и типов — в [API.md](API.md) и
-[README коннектора](READMEConnectorCSharp.md).
+[README коннектора]([READMEConnectorCSharp.md](https://github.com/rbsoft03/SKKMConnector/blob/main/README.md)).
 
 ---
 
@@ -223,7 +223,7 @@ public class MyXReport : Sample
 ## Лицензия
  
 Распространяется свободно по лицензии **MIT** — см.
-[README коннектора](https://github.com/sodiUmU/SKKMConnector/blob/main/README.md).
+[README коннектора]([https://github.com/sodiUmU/SKKMConnector/blob/main/README.md](https://github.com/rbsoft03/SKKMConnector/blob/main/README.md)).
  
 **Разработчик:** Ершов Евгений / RBSoft · [rbsoft.ru](https://rbsoft.ru) ·
 [online@rbsoft.ru](mailto:online@rbsoft.ru)
